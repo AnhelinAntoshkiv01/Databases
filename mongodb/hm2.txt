@@ -1,0 +1,71 @@
+db.students.find({avgScore: 4.2})
+db.students.find({class: 1})
+db.students.find({lessons: 'physics'})
+db.students.find({'parents.profession': 'scientist'})
+db.students.find({avgScore: {$gt:4}})
+db.students.aggregate([
+    {
+        $group: {
+            _id: 'avgScore',
+            theBestStudent: {$max: '$avgScore'},
+            theWorstStudent: {$min: '$avgScore'},
+            avg: {$avg: '$avgScore'}
+        }
+    }
+])
+db.students.aggregate([
+    {
+        $group: {
+            _id: 'avgScore',
+            avg: {$avg: '$avgScore'},
+            top3Students: {'$avgScore': {$gt: avg}}
+        }
+    },
+    {$limit: 3}
+])
+db.students.aggregate([
+    {
+        $match: {
+            $and: [
+                {lessons: 'mathematics'},
+                {lessons: 'physics'}
+        ]}
+    },
+    {
+        $group: {
+            _id: 'avgScore',
+            avg: {$avg: '$avgScore'}
+        }
+    }
+])
+db.students.aggregate([
+    {
+        $match: {
+            class: 2
+        }
+    }
+    {
+        $group: {
+            _id: '$lessons',
+            avg: {$avg: '$avgScore'}
+        }
+    }
+])
+db.students.find({parents: {$size:1}})
+db.students.find({"parents.profession": null})
+db.students.deleteOne({avgScore: {$lt: 2.5}})
+db.students.updateOne({"parents.profession": 'teacher'}, {$set:{avgScore: 5}})
+db.students.find({$and: {class: {$lt: 5}, lessons: 'physics'}})
+db.students.aggregate([
+    {
+        $group: {
+            _id: 'class',
+            theMostSuccessful: {$max: 'avgScore'},
+            class: '$class'
+        }
+    }
+])
+db.students.updateOne({"parents.profession": null}, {$push:{'parents.profession': 'waiter'}})
+
+
+
