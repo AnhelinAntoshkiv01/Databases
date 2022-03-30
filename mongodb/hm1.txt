@@ -1,0 +1,28 @@
+db.users.find({age: {$lt: 20}})
+db.users.find({
+    $or: [
+        {parents:'Tamara'},
+        {parents:'Petro'}
+    ]
+})
+db.users.find({studying: 'js'})
+db.users.updateOne({studying: {$size: 1}}, {$push:{studying:'java'}})
+db.users.find()
+db.users.find({
+    $and: [
+        {"address.house": {$gt: 1}},
+        {"address.house": {$lte: 20}}
+    ]
+})
+db.users.find({"address.street": /^.*. .*.$/i})
+db.users.deleteOne({studying: null})
+db.users.find()
+db.users.find({
+    $or: [
+        {parents:/na$/},
+        {parents:/na$/}
+    ]
+})
+db.users.updateOne({$nor:[{studying:'python'}]}, {$push:{studying: 'python'}})
+db.users.find()
+db.users.find().sort({rating:-1, "address.flat":-1})
